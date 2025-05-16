@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klávesové zkratky</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .otazka-sekce {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .zprava {
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none; /* Skryto na začátku */
+        }
+
+        .zprava.spravne {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .zprava.spatne {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        #finalni-zprava {
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: none; /* Skryto na začátku */
+        }
+
+        #druha-stranka-text {
+            white-space: pre-wrap; /* Zachová formátování a zalomí dlouhé řádky */
+            display: none; /* Skryto na začátku */
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: #eee;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="otazka-1" class="otazka-sekce">
+        <h2>Stiskni klávesovou zkratku pro označení všeho textu.</h2>
+        <p>Odpověď se zaznamená automaticky po stisku správné kombinace kláves.</p>
+        <div id="zprava-1" class="zprava"></div>
+    </div>
+
+    <div id="otazka-2" class="otazka-sekce" style="display: none;">
+        <h2>Stiskni klávesovou zkratku pro pro zkopírování textu do schránky.</h2>
+        <p>Odpověď se zaznamená automaticky po stisku správné kombinace kláves.</p>
+        <div id="zprava-2" class="zprava"></div>
+    </div>
+
+    <div id="otazka-3" class="otazka-sekce" style="display: none;">
+        <h2>Stiskni klávesovou zkratku pro hledání nějakého textu na stránce.</h2>
+        <p>Odpověď se zaznamená automaticky po stisku správné kombinace kláves.</p>
+        <div id="zprava-3" class="zprava"></div>
+    </div>
+
+    <div id="otazka-4" class="otazka-sekce" style="display: none;">
+        <h2>Stiskni klávesovou zkratku pro pro vložení textu ze schránky.</h2>
+        <p>Odpověď se zaznamená automaticky po stisku správné kombinace kláves.</p>
+        <div id="zprava-4" class="zprava"></div>
+    </div>
+
+    <div id="otazka-5" class="otazka-sekce" style="display: none;">
+        <h2>Stiskni klávesovou zkratku, která označí všechen text na stránce.</h2>
+        <p>Odpověď se zaznamená automaticky po stisku správné kombinace kláves.</p>
+        <div id="zprava-5" class="zprava"></div>
+    </div>
+
+    <div id="otazka-6" class="otazka-sekce" style="display: none;">
+        <h2>Stiskni klávesovou zkratku, která umožňuje hledat něco na stránce.</h2>
+        <p>Odpověď se zaznamená automaticky po stisku správné kombinace kláves.</p>
+        <div id="zprava-6" class="zprava"></div>
+    </div>
+
+    <div id="finalni-zprava" style="display: none;">
+        Skvěle. Už to ovládáš! Nyní vyčkej pár vteřin a zobrazí se ti nová stránka. Jakmile se zobrazí, zkopíruj všechen text na ní a zkopíruj jej a vlož jej jako odpověď do formuláře. Čekej prosím na načtení stránky...
+    </div>
+
+    <div id="druha-stranka-text" style="display: none;">
+        skirmich[copmleted:ctr+a;ctrl+c;ctrl+v;ctrl+f]:AlenkaIT
+    </div>
+
+    <script>
+        let aktualniOtazka = 1;
+        let zpravaElement;
+        let timeoutId;
+
+        document.addEventListener('keydown', function(event) {
+            let spravnaZkratka = false;
+
+            if (aktualniOtazka === 1 && event.ctrlKey && event.key === 'a') {
+                spravnaZkratka = true;
+            } else if (aktualniOtazka === 2 && event.ctrlKey && event.key === 'c') {
+                spravnaZkratka = true;
+            } else if (aktualniOtazka === 3 && event.ctrlKey && event.key === 'f') {
+                spravnaZkratka = true;
+            } else if (aktualniOtazka === 4 && event.ctrlKey && event.key === 'v') {
+                spravnaZkratka = true;
+            } else if (aktualniOtazka === 5 && event.ctrlKey && event.key === 'a') {
+                spravnaZkratka = true;
+            } else if (aktualniOtazka === 6 && event.ctrlKey && event.key === 'f') {
+                spravnaZkratka = true;
+            }
+
+            if (spravnaZkratka) {
+                zobrazZpravu('Správná zkratka!', 'spravne', 3000);
+                setTimeout(prejdiNaDalsiOtazku, 3000);
+            } else if (event.ctrlKey && (event.key === 'a' || event.key === 'c' || event.key === 'v' || event.key === 'f')) {
+                zobrazZpravu('To nebylo zrovna správně.', 'spatne', 4000);
+            }
+        });
+
+        function zobrazZpravu(text, typ, trvani) {
+            const zpravaId = `zprava-${aktualniOtazka}`;
+            zpravaElement = document.getElementById(zpravaId);
+            if (zpravaElement) {
+                zpravaElement.textContent = text;
+                zpravaElement.className = `zprava ${typ}`;
+                zpravaElement.style.display = 'block';
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    zpravaElement.style.display = 'none';
+                }, trvani);
+            } else if (aktualniOtazka > 6 && typ === 'spravne') {
+                document.getElementById('finalni-zprava').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('finalni-zprava').style.display = 'none';
+                    document.getElementById('druha-stranka-text').style.display = 'block';
+                }, 30000);
+            }
+        }
+
+        function prejdiNaDalsiOtazku() {
+            document.getElementById(`otazka-${aktualniOtazka}`).style.display = 'none';
+            aktualniOtazka++;
+            if (aktualniOtazka <= 6) {
+                document.getElementById(`otazka-${aktualniOtazka}`).style.display = 'block';
+            } else {
+                zobrazZpravu('Správná zkratka!', 'spravne', 3000); // Zobrazíme finální "Správná zkratka!"
+                setTimeout(() => {
+                    zobrazZpravu('', '', 0); // Skryjeme zprávu
+                    for (let i = 1; i <= 6; i++) {
+                        document.getElementById(`otazka-${i}`).style.display = 'none';
+                    }
+                    document.getElementById('finalni-zprava').style.display = 'block';
+                    setTimeout(() => {
+                        document.getElementById('finalni-zprava').style.display = 'none';
+                        document.getElementById('druha-stranka-text').style.display = 'block';
+                    }, 30000);
+                }, 3000);
+            }
+        }
+    </script>
+
+</body>
+</html>
